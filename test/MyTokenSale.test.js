@@ -1,5 +1,6 @@
 const Token = artifacts.require("MyToken");
 const TokenSale = artifacts.require("MyTokenSale");
+const KycContract = artifacts.require("KycContract");
 
 const chai = require("./setupChai.js");
 const BN = web3.utils.BN;
@@ -29,6 +30,16 @@ contract("TokenSale", async accounts => {
         let tokenSaleInstance = await TokenSale.deployed();
         // getting balance before transaction occurs
         let balanceBeforeAccount = await tokenInstance.balanceOf.call(recipient);
+
+        // since not whitelisted recipient's payment to token sale contract will be rejected
+        await expect(tokenSaleInstance.sendTransaction({from: recipient, value: web3.utils.toWei("1", "wei")})).to.be.rejected;
+        //  token balance of recipient should not have changed
+        await expect(balanceBeforeAccount).to.be.bignumber.equal(await tokenInstance.balanceOf.call(recipient));
+
+        // setting recipient to be whitelisted
+        let kycInstance = await KycContract.deployed();
+        await kycInstance.setKycCompleted(recipient);
+        
         // buy tokens (send 1 wei to contract) --> check this promise fufills
         await expect(tokenSaleInstance.sendTransaction({from: recipient, value: web3.utils.toWei("1", "wei")})).to.be.fulfilled;
         // comparing what token balance of account should be to what it is (should have one more token)

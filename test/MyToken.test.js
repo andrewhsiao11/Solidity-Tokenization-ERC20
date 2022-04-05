@@ -2,18 +2,8 @@ const Token = artifacts.require("MyToken");
 require("dotenv").config({ path: "../.env" });
 
 
-var chai = require("chai");
-
-//bring in Big Number Chai (see openzeppelin-test-helpers)
+const chai = require("./setupChai.js");
 const BN = web3.utils.BN;
-const chaiBN = require("chai-bn")(BN);
-chai.use(chaiBN);
-
-//bring in chai as promised (see domenic/chai-as-promised)
-var chaiAsPromised = require("chai-as-promised");
-chai.use(chaiAsPromised);
-
-//using chai.expect rather than old way
 const expect = chai.expect;
 
 contract("Token Test", async (accounts) => {
@@ -34,7 +24,7 @@ contract("Token Test", async (accounts) => {
     //let balance = await instance.balanceOf.call(initialHolder);
     //assert.equal(balance.valueOf(), 0, "Account 1 has a balance");
     //condensed, easier readable style:
-    await expect(
+    return await expect(
       instance.balanceOf(initialHolder)
     ).to.eventually.be.a.bignumber.equal(totalSupply);
   });
@@ -51,7 +41,7 @@ contract("Token Test", async (accounts) => {
       // check initial holders balance was decreased by amount
       await expect(instance.balanceOf(initialHolder)).to.eventually.be.a.bignumber.equal(totalSupply.sub(new BN(sendTokens)));
       // check if recipient balance equals amount recieved
-      await expect(instance.balanceOf(recipient)).to.eventually.be.a.bignumber.equal(new BN(sendTokens));
+      return await expect(instance.balanceOf(recipient)).to.eventually.be.a.bignumber.equal(new BN(sendTokens));
   });
 
   it("It's not possible to send more tokens than Account 1 has", async () => {
@@ -60,6 +50,6 @@ contract("Token Test", async (accounts) => {
       // confirm error if try to tranfer more than account balance
       await expect(instance.transfer(recipient, new BN(balanceOfAccount + 1))).to.eventually.be.rejected;
       // Check if balance is still the same
-      await expect(instance.balanceOf(initialHolder)).to.eventually.be.a.bignumber.equal(balanceOfAccount);
+      return await expect(instance.balanceOf(initialHolder)).to.eventually.be.a.bignumber.equal(balanceOfAccount);
   });
 });

@@ -8,4 +8,7 @@ contract MyToken is ERC20 {
         _mint(msg.sender, initialSupply);
         _setupDecimals(0);
     }
+
+    // person who creates token gets a set amount of token - set in deploy_contracts migration
+    // no decimals (default is 18)
 }

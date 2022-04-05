@@ -27,9 +27,11 @@ contract("TokenSale", async accounts => {
     it("Should be possible to buy one token by simply sending ether to the smart contract", async () => {
         let tokenInstance = await Token.deployed();
         let tokenSaleInstance = await TokenSale.deployed();
+        // getting balance before transaction occurs
         let balanceBeforeAccount = await tokenInstance.balanceOf.call(recipient);
-
+        // buy tokens (send 1 wei to contract) --> check this promise fufills
         await expect(tokenSaleInstance.sendTransaction({from: recipient, value: web3.utils.toWei("1", "wei")})).to.be.fulfilled;
+        // comparing what token balance of account should be to what it is (should have one more token)
         return expect(balanceBeforeAccount + 1).to.be.bignumber.equal(await tokenInstance.balanceOf.call(recipient));
     })
 

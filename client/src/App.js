@@ -47,10 +47,13 @@ class App extends Component {
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.listenToTokenTransfer();
-      this.setState({
-        loaded: true,
-        tokenSaleAddress: this.myTokenSale._address,
-      }, this.updateUserTokens);
+      this.setState(
+        {
+          loaded: true,
+          tokenSaleAddress: this.myTokenSale._address,
+        },
+        this.updateUserTokens
+      );
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -80,7 +83,7 @@ class App extends Component {
       .send({ from: this.accounts[0], value: 1 });
   };
 
-// update user's token state
+  // update user's token state
   updateUserTokens = async () => {
     let userTokens = await this.myToken.methods
       .balanceOf(this.accounts[0])
@@ -92,9 +95,11 @@ class App extends Component {
   // defined in IERC20.sol and address is indexed (to)
   // listen to when "to" field is set to this account, then call updateusertokens
   /// data is what we are listening to when there is transfer transaction
-  listenToTokenTransfer = async() => {
-    this.myToken.events.Transfer({to: this.accounts[0]}).on("data", this.updateUserTokens);
-  }
+  listenToTokenTransfer = async () => {
+    this.myToken.events
+      .Transfer({ to: this.accounts[0] })
+      .on("data", this.updateUserTokens);
+  };
 
   render() {
     if (!this.state.loaded) {
@@ -102,11 +107,16 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <h1>TravisCoin Token Sale</h1>
-        {/* <p>Token Sale</p> */}
+        <nav
+          className="navbar navbar-light justify-content-md-center"
+          style={{ backgroundColor: "#e3f2fd" }}
+        >
+          <h1>TravisCoin Token Sale</h1>
+        </nav>
+      <br />
         <h2>Enable your account</h2>
 
-        <div className="container input-group justify-content-md-center">
+        <div className="container input-group justify-content-md-center ">
           <label className="form-label input-group-text">
             Address to allow:
             <input
@@ -125,15 +135,22 @@ class App extends Component {
             </button>
           </label>
         </div>
-
+      <br />
         <h2>Buy TravisCoin Tokens:</h2>
-        <p>Send Ether to this address: {this.state.tokenSaleAddress}</p>
+        <p>
+          Send Ether to this address:{" "}
+          <span className="user-select-all fw-bold">
+            {this.state.tokenSaleAddress}</span>
+        </p>
 
-        <h5>You have: {this.state.userTokens} TravisCoin Token{this.state.userTokens != 1 && "s"}</h5>
+        <h5>
+          You have: {this.state.userTokens} TravisCoin Token
+          {this.state.userTokens != 1 && "s"}
+        </h5>
         <button
           type="button"
           onClick={this.handleBuyToken}
-          className="btn btn-primary"
+          className="btn btn-success"
         >
           Buy more tokens
         </button>

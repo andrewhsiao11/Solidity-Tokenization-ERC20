@@ -21,6 +21,18 @@ module.exports = {
         return new HDWalletProvider(process.env.MNEMONIC, "http://127.0.0.1:7545", MetaMaskAccountIndex)
       },
       network_id: 1337
+    },
+    ropsten_infura: {
+      provider: function() {
+        return new HDWalletProvider(process.env.MNEMONIC, "https://ropsten.infura.io/v3/4680dab9d00b41699b4298deb266a641", MetaMaskAccountIndex)
+      },
+      network_id: 3
+    },
+    goerli_infura: {
+      provider: function() {
+        return new HDWalletProvider(process.env.MNEMONIC, "https://goerli.infura.io/v3/4680dab9d00b41699b4298deb266a641", MetaMaskAccountIndex)
+      },
+      network_id: 5
     }
   },
   compilers: {

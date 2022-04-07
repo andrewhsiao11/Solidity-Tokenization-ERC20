@@ -3,6 +3,9 @@ import MyToken from "./contracts/MyToken.json";
 import MyTokenSale from "./contracts/MyTokenSale.json";
 import KycContract from "./contracts/KycContract.json";
 import getWeb3 from "./getWeb3";
+import bunny from "./assets/BunnyCoin.png";
+import backgroundBunny from "./assets/backgroundBunny.jpg";
+import bunnyRow from "./assets/bunnyRow.jpg";
 
 import "./App.css";
 
@@ -111,49 +114,67 @@ class App extends Component {
           className="navbar navbar-light justify-content-md-center"
           style={{ backgroundColor: "#e3f2fd" }}
         >
+          <a className="navbar-brand" href="#">
+            <img src={bunny} width="55" height="55" />
+          </a>
           <h1>TravisCoin Token Sale</h1>
         </nav>
-      <br />
-        <h2>Enable your account</h2>
 
-        <div className="container input-group justify-content-md-center ">
-          <label className="form-label input-group-text">
-            Address to allow:
-            <input
-              type="text"
-              name="kycAddress"
-              value={this.state.kycAddress}
-              onChange={this.handleInputChange}
-              className="form-control"
-            />
+        <div className="card">
+          <div className="card-body">
+            <h2>Whitelist an account</h2>
+
+            <div className="container input-group justify-content-md-center ">
+              <label className="form-label input-group-text">
+                Address to allow:
+                <input
+                  type="text"
+                  name="kycAddress"
+                  value={this.state.kycAddress}
+                  onChange={this.handleInputChange}
+                  className="form-control"
+                />
+                <button
+                  type="button"
+                  onClick={this.handleKycSubmit}
+                  className="btn btn-secondary"
+                >
+                  Add Address to Whitelist
+                </button>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="card-body">
+            <h2>
+              <img src={bunny} width="30" height="30" />
+              Buy TravisCoin Tokens
+              <img src={bunny} width="30" height="30" />
+            </h2>
+            <p>
+              Send Ether to this address:{" "}
+              <span className="user-select-all fw-bold">
+                {this.state.tokenSaleAddress}
+              </span>
+            </p>
+            <img src={bunnyRow} width="225" height="100" />
+            <h5>
+              You have: {this.state.userTokens} TravisCoin Token
+              {this.state.userTokens != 1 && "s"}
+            </h5>
             <button
               type="button"
-              onClick={this.handleKycSubmit}
-              className="btn btn-primary"
+              onClick={this.handleBuyToken}
+              className="btn btn-outline-success btn-lg"
             >
-              Add Address to Whitelist
+              Buy more tokens
             </button>
-          </label>
+          </div>
         </div>
-      <br />
-        <h2>Buy TravisCoin Tokens:</h2>
-        <p>
-          Send Ether to this address:{" "}
-          <span className="user-select-all fw-bold">
-            {this.state.tokenSaleAddress}</span>
-        </p>
-
-        <h5>
-          You have: {this.state.userTokens} TravisCoin Token
-          {this.state.userTokens != 1 && "s"}
-        </h5>
-        <button
-          type="button"
-          onClick={this.handleBuyToken}
-          className="btn btn-success"
-        >
-          Buy more tokens
-        </button>
+        <br />
+        <img src={backgroundBunny} width="600" height="400" />
       </div>
     );
   }
